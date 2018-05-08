@@ -1,5 +1,5 @@
 {
-  "name": "unum-scraper-api",
+  "name": "instagram-scraper-api",
   "version": "1.0.0",
   "description": "Scrapes for basic instagram user profiles",
   "main": "src/index.js",
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "unum",
+    "instagram",
     "scraper",
     "api"
   ],

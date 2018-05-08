@@ -1,16 +1,16 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: unum-scraper-redis-deployment
+  name: instagram-scraper-redis-deployment
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: unum-scraper-redis
+        app: instagram-scraper-redis
     spec:
       containers:
-      - name: unum-scraper-redis
+      - name: instagram-scraper-redis
         image: redis:alpine
         ports:
         - containerPort: 6379
@@ -18,10 +18,10 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: unum-scraper-redis-service
+  name: instagram-scraper-redis-service
 spec:
   selector:
-    app: unum-scraper-redis
+    app: instagram-scraper-redis
   ports:
     - port: 6379
       targetPort: 6379
