@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: unum-scraper-redis-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: unum-scraper-redis
+    spec:
+      containers:
+      - name: unum-scraper-redis
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: unum-scraper-redis-service
+spec:
+  selector:
+    app: unum-scraper-redis
+  ports:
+    - port: 6379
+      targetPort: 6379

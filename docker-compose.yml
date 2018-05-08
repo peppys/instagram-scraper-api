@@ -1,0 +1,21 @@
+version: '3'
+services:
+  api:
+    build: .
+    ports:
+     - "8080:8080" # API
+     - "3000:3000" # Kue UI
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - API_PORT=8080
+      - KUE_UI_PORT=3000
+      - NODE_ENV=production
+    depends_on:
+      - redis
+    privileged: true
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  

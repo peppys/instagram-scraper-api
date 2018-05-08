@@ -1,0 +1,55 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: instagram-scraper-api-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: instagram-scraper-api
+    spec:
+      containers:
+      - name: instagram-scraper-api
+        image: xpeppy/instagram-scraper-api:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: REDIS_HOST
+          value: "instagram-scraper-redis-service"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: API_PORT
+          value: "8080"
+        - name: KUE_UI_PORT
+          value: "3000"
+        - name: NODE_ENV
+          value: "production"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: instagram-scraper-api-service
+spec:
+  selector:
+    app: instagram-scraper-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+  # loadBalancerIP: "35.231.115.252"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: instagram-scraper-kue-ui-service
+spec:
+  selector:
+    app: instagram-scraper-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+  # loadBalancerIP: "35.233.174.137"
