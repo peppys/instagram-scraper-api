@@ -38,7 +38,6 @@ spec:
       port: 80
       targetPort: 8080
   type: LoadBalancer
-  # loadBalancerIP: "35.231.115.252"
 ---
 kind: Service
 apiVersion: v1
@@ -52,4 +51,3 @@ spec:
       port: 80
       targetPort: 3000
   type: LoadBalancer
-  # loadBalancerIP: "35.233.174.137"
