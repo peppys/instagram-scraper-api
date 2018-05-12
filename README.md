@@ -9,13 +9,13 @@ docker-compose up
 
 API: `localhost:8080` 
 
-`/user_profile/?user_name={instagram_username}`  
+`/user-profile/:username`  
 - Scrapes instagram web profile via headless chrome and returns profile info
 
-`/user_profile_continue/?user_name={instagram_username}`  
+`/user-profile/queue/:username`  
 - Queues background jobs to scrape profile
 
-Kue UI: `localhost:3000`
+Kue UI: `localhost:3000`  
 - UI to track status of background jobs
 
 # Techonologies

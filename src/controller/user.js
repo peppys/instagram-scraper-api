@@ -13,7 +13,9 @@ module.exports = {
      * @param {Object} res
      */
     getProfile: (req, res) => {
-        if (!req.query.user_name) {
+        const username = req.params.username;
+
+        if (!username) {
             res.status(constants.http.STATUS_BAD_REQUEST)
                 .json({
                     error: constants.errors.NO_USERNAME
@@ -21,7 +23,7 @@ module.exports = {
             return;
         }
 
-        instagramScraperService.getProfile(req.query.user_name)
+        instagramScraperService.getProfile(username)
             .then((response) => {
                 res.status(constants.http.STATUS_OK)
                     .json({
@@ -53,7 +55,9 @@ module.exports = {
      * @param {Object} res
      */
     getProfileAsync: (req, res) => {
-        if (!req.query.user_name) {
+        const username = req.params.username;
+
+        if (!username) {
             res.status(constants.http.STATUS_BAD_REQUEST)
                 .json({
                     error: constants.errors.NO_USERNAME
@@ -63,7 +67,7 @@ module.exports = {
 
         Promise.all(
             Array(10)
-                .fill(req.query.user_name)
+                .fill(username)
                 .map(queueService.queueInstagramProfileScrape)
         ).then(jobs => {
             // Let caller know scrapes were sucessfully queued

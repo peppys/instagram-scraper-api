@@ -7,8 +7,8 @@ const userController = require('../controller/user');
  * @returns {Object}
  */
 module.exports = (app) => {
-    app.get('/user_profile', userController.getProfile);
-    app.get('/user_profile_continue', userController.getProfileAsync);
+    app.get('/user-profile/:username', userController.getProfile);
+    app.get('/user-profile/queue/:username', userController.getProfileAsync);
 
     return app;
 }
