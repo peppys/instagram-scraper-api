@@ -9,7 +9,7 @@ const instagramScraperService = require('../src/service/instagramScraper');
  * @param {Number} opts.timeout Milliseconds
  * @param {Number} opts.sleep Milleseconds
  */
-module.exports = (queue, opts) => {
+module.exports = async (queue, opts) => {
     queue.process(queueConstants.INSTAGRAM_PROFILE_SCRAPE, (job, ctx, done) => {
         const data = job.data;
 
@@ -21,15 +21,15 @@ module.exports = (queue, opts) => {
         }
 
         // Scrape profile
-        instagramScraperService.getProfile(data.username)
-            .then((response) => {
-                done(null, response);
-                console.log(JSON.stringify({
-                    data: response
-                }));
-            }, (error) => {
-                done(error);
-            });
+        try {
+            const response = await instagramScraperService.getProfile(data.username)
+            done(null, response);
+            console.log(JSON.stringify({
+                data: response
+            }));
+        } catch (err) {
+            done(error);
+        }
 
         if (opts.timeout && opts.sleep) {
             // Go to sleep after processing job successfully

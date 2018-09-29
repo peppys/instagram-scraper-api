@@ -12,7 +12,7 @@ module.exports = {
      * @param {Object} req
      * @param {Object} res
      */
-    getProfile: (req, res) => {
+    getProfile: async (req, res) => {
         const username = req.params.username;
 
         if (!username) {
@@ -23,29 +23,30 @@ module.exports = {
             return;
         }
 
-        instagramScraperService.getProfile(username)
-            .then((response) => {
-                res.status(constants.http.STATUS_OK)
-                    .json({
-                        data: response
-                    });
-            }).catch(error => {
-                var status, errorMessage;
+        try {
+            const response = await instagramScraperService.getProfile(username)
 
-                if (error.message === constants.errors.PROFILE_DOESNT_EXIST) {
-                    status = constants.http.STATUS_BAD_REQUEST;
-                    errorMessage = error.message;
-                } else {
-                    console.error(error);
-                    status = constants.http.STATUS_INTERNAL_SERVER_ERROR;
-                    errorMessage = 'Internal Server Error';
-                }
+            res.status(constants.http.STATUS_OK)
+                .json({
+                    data: response
+                });
+        } catch (err) {
+            let status, errorMessage;
 
-                res.status(status)
-                    .json({
-                        error: errorMessage
-                    });
-            });
+            if (error.message === constants.errors.PROFILE_DOESNT_EXIST) {
+                status = constants.http.STATUS_BAD_REQUEST;
+                errorMessage = error.message;
+            } else {
+                console.error(error);
+                status = constants.http.STATUS_INTERNAL_SERVER_ERROR;
+                errorMessage = 'Internal Server Error';
+            }
+
+            res.status(status)
+                .json({
+                    error: errorMessage
+                });
+        }
     },
 
     /**
@@ -54,7 +55,7 @@ module.exports = {
      * @param {Object} req
      * @param {Object} res
      */
-    getProfileAsync: (req, res) => {
+    getProfileAsync: async (req, res) => {
         const username = req.params.username;
 
         if (!username) {
@@ -65,23 +66,25 @@ module.exports = {
             return;
         }
 
-        Promise.all(
-            Array(10)
-                .fill(username)
-                .map(queueService.queueInstagramProfileScrape)
-        ).then(jobs => {
+        try {
+            const jobs = Promise.all(
+                Array(10)
+                    .fill(username)
+                    .map(queueService.queueInstagramProfileScrape)
+            )
+
             // Let caller know scrapes were sucessfully queued
             res.status(constants.http.STATUS_OK)
                 .json({
                     jobs: jobs
                 });
-        }).catch(err => {
+        } catch (err) {
             console.error(err);
             res.status(constants.http.STATUS_INTERNAL_SERVER_ERROR)
                 .json({
                     response: constants.errors.INTERNAL_SERVER_ERROR
                 });
             return;
-        });
+        }
     }
 }
