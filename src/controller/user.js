@@ -67,7 +67,7 @@ module.exports = {
         }
 
         try {
-            const jobs = Promise.all(
+            const jobs = await Promise.all(
                 Array(10)
                     .fill(username)
                     .map(queueService.queueInstagramProfileScrape)
@@ -76,7 +76,7 @@ module.exports = {
             // Let caller know scrapes were sucessfully queued
             res.status(constants.http.STATUS_OK)
                 .json({
-                    jobs: jobs
+                    jobs,
                 });
         } catch (err) {
             console.error(err);

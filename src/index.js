@@ -9,7 +9,7 @@ var app = express();
 // Start worker
 worker(kue.createQueue(config.kue), {
     timeout: 15000,
-    sleep: 120000
+    sleep: 10000
 });
 
 // Setup user api routes & listen

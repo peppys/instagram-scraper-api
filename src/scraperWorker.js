@@ -10,7 +10,7 @@ const instagramScraperService = require('../src/service/instagramScraper');
  * @param {Number} opts.sleep Milleseconds
  */
 module.exports = async (queue, opts) => {
-    queue.process(queueConstants.INSTAGRAM_PROFILE_SCRAPE, (job, ctx, done) => {
+    queue.process(queueConstants.INSTAGRAM_PROFILE_SCRAPE, async (job, ctx, done) => {
         const data = job.data;
 
         console.log('Worker for queue %s is processing job %s.', queueConstants.INSTAGRAM_PROFILE_SCRAPE, JSON.stringify(data));
@@ -34,7 +34,7 @@ module.exports = async (queue, opts) => {
         if (opts.timeout && opts.sleep) {
             // Go to sleep after processing job successfully
             ctx.pause(opts.timeout, function (err) {
-                console.log('Worker for queue %s is going to sleep for %i minutes.', queueConstants.INSTAGRAM_PROFILE_SCRAPE, opts.sleep / 1000 / 60);
+                console.log('Worker for queue %s is going to sleep for %i seconds.', queueConstants.INSTAGRAM_PROFILE_SCRAPE, opts.sleep / 1000);
                 setTimeout(() => {
                     console.log('Worker for queue %s has woke up!', queueConstants.INSTAGRAM_PROFILE_SCRAPE);
                     ctx.resume();
